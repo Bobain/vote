@@ -11,7 +11,7 @@
  */
 
 // Colonnes fixes (l'ordre dans le Sheet ne dépend pas du shuffle côté page)
-var NAMES = ['Guinguette','Saltimbanque','Farandole','Ritournelle','Bateleur','Bastringue','Baladin','Parvis','Liesse','Chapeau'];
+var NAMES = ['Guinguette','Saltimbanque','Ritournelle','Bateleur','Bastringue','Baladin','Parvis','Liesse','Chapeau'];
 var MAX_VOTES_PER_IP = 4;
 
 function doPost(e) {
