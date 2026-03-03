@@ -21,8 +21,8 @@ MENTIONS = [
 MENTION_RANK = {m: i for i, m in enumerate(MENTIONS)}
 
 NAMES = [
-    "Parvis", "Chapeau", "Troubadour", "Kiosque", "Liesse",
-    "Prélude", "Saltimbanque", "Mélomane", "Guinguette", "Lyre",
+    "Guinguette", "Saltimbanque", "Farandole", "Ritournelle", "Bateleur",
+    "Bastringue", "Baladin", "Parvis", "Liesse", "Chapeau",
 ]
 
 

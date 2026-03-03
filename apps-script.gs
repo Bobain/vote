@@ -10,8 +10,8 @@
  * 4. Copier l'URL et la coller dans index.html (VOTRE_URL_APPS_SCRIPT)
  */
 
-// Ordre identique à index.html (seed 15)
-var NAMES = ['Parvis','Chapeau','Troubadour','Kiosque','Liesse','Prélude','Saltimbanque','Mélomane','Guinguette','Lyre'];
+// Colonnes fixes (l'ordre dans le Sheet ne dépend pas du shuffle côté page)
+var NAMES = ['Guinguette','Saltimbanque','Farandole','Ritournelle','Bateleur','Bastringue','Baladin','Parvis','Liesse','Chapeau'];
 
 function doPost(e) {
   try {

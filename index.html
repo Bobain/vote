@@ -101,7 +101,7 @@
 
 <!-- ============ SECTION 3 — CRITÈRES ============ -->
 <h2>Les noms proposés</h2>
-<p>32 noms ont été explorés selon 10 critères (signification, sonorité, visuel, domaine, stores, INPI, réseaux sociaux, SEO, connotation, international). Les 10 meilleurs sont présentés ici, en <strong>ordre aléatoire</strong> pour éviter tout biais.</p>
+<p>Plus de 40 noms ont été explorés selon 10 critères (signification, sonorité, visuel, domaine, app stores, INPI, réseaux sociaux, SEO, connotation, international). Les 10 meilleurs sont présentés ici, en <strong>ordre aléatoire</strong> pour éviter tout biais.</p>
 
 <!-- ============ SECTION 4 — GRILLE DE VOTE ============ -->
 <h2>Ton vote</h2>
@@ -143,9 +143,19 @@
 // Bobain : remplace cette URL par celle de ton Apps Script déployé
 var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby6fq0ykEwrdspdOWzDw_bWs_LUZbnHUmTxcADbdwIfsFtqy5-SOl5GxEyxN-IXZ4UI/exec';
 
-// Ordre aléatoire (seed 15, Python random.shuffle)
-var NAMES = ['Parvis','Chapeau','Troubadour','Kiosque','Liesse','Prélude','Saltimbanque','Mélomane','Guinguette','Lyre'];
+// Les 10 candidats (mélangés aléatoirement à chaque chargement)
+var NAMES = ['Guinguette','Saltimbanque','Farandole','Ritournelle','Bateleur','Bastringue','Baladin','Parvis','Liesse','Chapeau'];
 var MENTIONS = ['Excellent','Très bien','Bien','Assez bien','Passable','Insuffisant','À rejeter'];
+
+// ── Mélange aléatoire (Fisher-Yates) ───────────────
+function shuffle(arr) {
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+  return arr;
+}
+shuffle(NAMES);
 
 // ── Génération de la grille ────────────────────────
 (function buildGrid() {
