@@ -12,31 +12,54 @@
 
 // Colonnes fixes (l'ordre dans le Sheet ne dépend pas du shuffle côté page)
 var NAMES = ['Guinguette','Saltimbanque','Farandole','Ritournelle','Bateleur','Bastringue','Baladin','Parvis','Liesse','Chapeau'];
+var MAX_VOTES_PER_IP = 4;
 
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var ip = data.ip || 'inconnu';
+    var pseudo = data.pseudo;
 
     // En-têtes si la feuille est vide
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['Horodatage', 'Pseudonyme'].concat(NAMES));
+      sheet.appendRow(['Horodatage', 'Pseudonyme', 'IP'].concat(NAMES));
+    }
+
+    // Vérifications sur les votes existants
+    var lastRow = sheet.getLastRow();
+    if (lastRow > 1) {
+      var existing = sheet.getRange(2, 1, lastRow - 1, 3).getValues();
+      var ipCount = 0;
+      for (var i = 0; i < existing.length; i++) {
+        if (existing[i][2] === ip) {
+          ipCount++;
+          if (existing[i][1] === pseudo) {
+            return jsonResponse({ status: 'error', error: 'Ce pseudonyme a d\u00e9j\u00e0 vot\u00e9 depuis cette connexion.' });
+          }
+        }
+      }
+      if (ip !== 'inconnu' && ipCount >= MAX_VOTES_PER_IP) {
+        return jsonResponse({ status: 'error', error: 'Maximum ' + MAX_VOTES_PER_IP + ' votes par connexion atteint.' });
+      }
     }
 
     // Construire la ligne
-    var row = [new Date(), data.pseudo];
+    var row = [new Date(), pseudo, ip];
     NAMES.forEach(function(name) {
       row.push(data[name] || '');
     });
 
     sheet.appendRow(row);
 
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: 'ok' }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return jsonResponse({ status: 'ok' });
   } catch (err) {
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: 'error', error: err.message }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return jsonResponse({ status: 'error', error: err.message });
   }
+}
+
+function jsonResponse(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
 }

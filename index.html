@@ -205,6 +205,13 @@ function showValidationErrors(errors) {
   el.style.display = 'block';
 }
 
+// ── Récupération IP ────────────────────────────────
+var voterIP = '';
+fetch('https://api.ipify.org?format=json')
+  .then(function(r) { return r.json(); })
+  .then(function(d) { voterIP = d.ip; })
+  .catch(function() { voterIP = 'inconnu'; });
+
 // ── Soumission ─────────────────────────────────────
 function submitVote() {
   document.getElementById('msg-validation').style.display = 'none';
@@ -217,7 +224,7 @@ function submitVote() {
     return;
   }
 
-  var data = { pseudo: document.getElementById('pseudo').value.trim() };
+  var data = { pseudo: document.getElementById('pseudo').value.trim(), ip: voterIP };
   NAMES.forEach(function(name, i) {
     data[name] = document.querySelector('input[name="vote_' + i + '"]:checked').value;
   });
@@ -236,6 +243,10 @@ function submitVote() {
     if (res.status === 'ok') {
       document.getElementById('msg-ok').style.display = 'block';
       btn.textContent = 'Vote enregistré';
+    } else if (res.status === 'error') {
+      showValidationErrors([res.error]);
+      btn.disabled = false;
+      btn.textContent = 'Voter';
     } else {
       throw new Error('server error');
     }
