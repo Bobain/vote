@@ -67,11 +67,52 @@
   .validation-errors { list-style: none; padding: 0; }
   .validation-errors li::before { content: "\2022 "; }
 
-  /* Responsive */
+  /* Responsive — cartes sur mobile */
   @media (max-width: 600px) {
-    .vote-grid { font-size: .75rem; }
-    .vote-grid th, .vote-grid td { padding: .35rem .15rem; }
-    .vote-grid th { font-size: .65rem; }
+    .vote-grid thead { display: none; }
+    .vote-grid, .vote-grid tbody, .vote-grid tr, .vote-grid td { display: block; }
+    .vote-grid tr {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: .75rem;
+      padding: .5rem;
+      background: #fff;
+    }
+    .vote-grid tr:hover { background: #fff; }
+    .vote-grid td:first-child {
+      font-size: 1.1rem;
+      margin-bottom: .5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: .4rem;
+    }
+    .vote-grid td:not(:first-child) {
+      display: inline-block;
+      width: calc(100% / 7);
+      text-align: center;
+      border-bottom: none;
+      padding: .3rem 0;
+      vertical-align: top;
+    }
+    .vote-grid td:not(:first-child)::before {
+      content: attr(data-label);
+      display: block;
+      font-size: .6rem;
+      font-weight: 700;
+      color: #fff;
+      border-radius: 3px;
+      padding: 1px 2px;
+      margin-bottom: 2px;
+      line-height: 1.3;
+    }
+    .vote-grid td:nth-child(2)::before { background: #065f46; }
+    .vote-grid td:nth-child(3)::before { background: #047857; }
+    .vote-grid td:nth-child(4)::before { background: #059669; }
+    .vote-grid td:nth-child(5)::before { background: #d97706; }
+    .vote-grid td:nth-child(6)::before { background: #ea580c; }
+    .vote-grid td:nth-child(7)::before { background: #dc2626; }
+    .vote-grid td:nth-child(8)::before { background: #991b1b; }
+    .vote-grid { border-collapse: separate; }
+    [style*="overflow-x"] { overflow-x: visible !important; }
   }
 </style>
 </head>
@@ -146,6 +187,7 @@ var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpz9X5E96FtcANw_
 // Les 10 candidats (mélangés aléatoirement à chaque chargement)
 var NAMES = ['Guinguette','Saltimbanque','Farandole','Ritournelle','Bateleur','Bastringue','Baladin','Parvis','Liesse','Chapeau'];
 var MENTIONS = ['Excellent','Très bien','Bien','Assez bien','Passable','Insuffisant','À rejeter'];
+var MENTION_LABELS = ['Exc.','T.B.','Bien','A.B.','Pass.','Ins.','Rej.'];
 var MAX_VOTES_PER_IP = 4;
 
 // ── Mélange aléatoire (Fisher-Yates) ───────────────
@@ -166,8 +208,9 @@ shuffle(NAMES);
     var tdName = document.createElement('td');
     tdName.textContent = name;
     tr.appendChild(tdName);
-    MENTIONS.forEach(function(mention) {
+    MENTIONS.forEach(function(mention, j) {
       var td = document.createElement('td');
+      td.setAttribute('data-label', MENTION_LABELS[j]);
       var radio = document.createElement('input');
       radio.type = 'radio';
       radio.name = 'vote_' + i;
