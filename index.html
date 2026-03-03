@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vote — Nom de la plateforme musicale</title>
+<style>
+  :root {
+    --bg: #fafaf8;
+    --fg: #1a1a1a;
+    --accent: #2d5016;
+    --accent-light: #e8f0e2;
+    --border: #d4d0c8;
+    --error: #b91c1c;
+    --radius: 6px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg); color: var(--fg);
+    line-height: 1.6; max-width: 720px; margin: 0 auto;
+    padding: 2rem 1rem 4rem;
+  }
+  h1 { font-size: 1.6rem; margin-bottom: .5rem; }
+  h2 { font-size: 1.2rem; margin: 2rem 0 .75rem; border-bottom: 2px solid var(--accent); padding-bottom: .25rem; }
+  p, li { margin-bottom: .5rem; }
+  ul { padding-left: 1.4rem; }
+  a { color: var(--accent); }
+
+  /* Grille de vote */
+  .vote-grid { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .9rem; }
+  .vote-grid th, .vote-grid td { padding: .5rem .3rem; text-align: center; border-bottom: 1px solid var(--border); }
+  .vote-grid th { background: var(--accent); color: #fff; font-weight: 600; font-size: .75rem; position: sticky; top: 0; }
+  .vote-grid th:first-child { text-align: left; min-width: 120px; }
+  .vote-grid td:first-child { text-align: left; font-weight: 600; }
+  .vote-grid tr:hover { background: var(--accent-light); }
+  .vote-grid input[type="radio"] { cursor: pointer; width: 16px; height: 16px; }
+
+  /* Mentions couleurs */
+  .vote-grid th:nth-child(2) { background: #065f46; }
+  .vote-grid th:nth-child(3) { background: #047857; }
+  .vote-grid th:nth-child(4) { background: #059669; }
+  .vote-grid th:nth-child(5) { background: #d97706; }
+  .vote-grid th:nth-child(6) { background: #ea580c; }
+  .vote-grid th:nth-child(7) { background: #dc2626; }
+  .vote-grid th:nth-child(8) { background: #991b1b; }
+
+  /* Formulaire */
+  label.pseudo-label { font-weight: 600; display: block; margin-bottom: .3rem; }
+  input[type="text"] {
+    width: 100%; max-width: 300px; padding: .5rem; border: 1px solid var(--border);
+    border-radius: var(--radius); font-size: 1rem;
+  }
+  .btn {
+    display: inline-block; background: var(--accent); color: #fff; border: none;
+    padding: .7rem 2rem; font-size: 1rem; border-radius: var(--radius);
+    cursor: pointer; margin-top: 1rem;
+  }
+  .btn:hover { background: #1e3a0f; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* Messages */
+  .msg { padding: .75rem 1rem; border-radius: var(--radius); margin-top: 1rem; display: none; }
+  .msg-ok { background: #d1fae5; color: #065f46; }
+  .msg-err { background: #fee2e2; color: var(--error); }
+  .msg-warn { background: #fef3c7; color: #92400e; }
+  .validation-errors { list-style: none; padding: 0; }
+  .validation-errors li::before { content: "\2022 "; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .vote-grid { font-size: .75rem; }
+    .vote-grid th, .vote-grid td { padding: .35rem .15rem; }
+    .vote-grid th { font-size: .65rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Choisis le nom de la plateforme !</h1>
+
+<!-- ============ SECTION 1 — L'ASSOCIATION ============ -->
+<h2>Le projet en bref</h2>
+<p>On construit une <strong>plateforme musicale associative</strong> (loi 1901) où les artistes partagent leur musique et reçoivent des dons directs des auditeurs.</p>
+<ul>
+  <li><strong>0 % de commission</strong> — 100 % du don va à l'artiste</li>
+  <li><strong>Paiement direct</strong> (IBAN, Wero, Revolut) — pas d'intermédiaire</li>
+  <li><strong>Open source</strong> (AGPL + CC BY-SA) — le code est public</li>
+  <li><strong>Pas de pub, pas de revente de données</strong> — la plateforme vit des mêmes dons que les artistes</li>
+</ul>
+<p>C'est la métaphore du chapeau du musicien de rue : quelqu'un joue, quelqu'un apprécie, quelqu'un donne. Pas de ticket, pas d'algorithme.</p>
+
+<!-- ============ SECTION 2 — LE JUGEMENT MAJORITAIRE ============ -->
+<h2>Comment fonctionne ce vote ?</h2>
+<p>Ce vote utilise le <strong>Jugement Majoritaire</strong> (Balinski &amp; Laraki, 2007) : chaque votant attribue une <em>mention</em> à <em>chaque</em> nom. Le nom le mieux évalué par une majorité l'emporte.</p>
+<p>
+  <a href="https://fr.wikipedia.org/wiki/Jugement_majoritaire" target="_blank" rel="noopener">Wikipédia — Jugement Majoritaire</a> ·
+  <a href="https://youtu.be/ZoGH7d51bvc" target="_blank" rel="noopener">Vidéo Science Étonnante</a>
+</p>
+
+<!-- ============ SECTION 3 — CRITÈRES ============ -->
+<h2>Les noms proposés</h2>
+<p>32 noms ont été explorés selon 10 critères (signification, sonorité, visuel, domaine, stores, INPI, réseaux sociaux, SEO, connotation, international). Les 10 meilleurs sont présentés ici, en <strong>ordre aléatoire</strong> pour éviter tout biais.</p>
+
+<!-- ============ SECTION 4 — GRILLE DE VOTE ============ -->
+<h2>Ton vote</h2>
+
+<div style="margin-bottom: 1.5rem;">
+  <label class="pseudo-label" for="pseudo">Ton pseudonyme</label>
+  <input type="text" id="pseudo" placeholder="Comment tu t'appelles ?" autocomplete="off">
+</div>
+
+<p>Pour chaque nom, coche <strong>une seule mention</strong> :</p>
+
+<div style="overflow-x: auto;">
+<table class="vote-grid" id="vote-table">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Excellent</th>
+      <th>Très bien</th>
+      <th>Bien</th>
+      <th>Assez bien</th>
+      <th>Passable</th>
+      <th>Insuffisant</th>
+      <th>À rejeter</th>
+    </tr>
+  </thead>
+  <tbody id="vote-body"></tbody>
+</table>
+</div>
+
+<!-- ============ SECTION 5 — SOUMISSION ============ -->
+<div id="msg-validation" class="msg msg-warn"></div>
+<div id="msg-ok" class="msg msg-ok">Merci pour ton vote ! Il a bien été enregistré.</div>
+<div id="msg-err" class="msg msg-err">Erreur lors de l'envoi. Vérifie ta connexion et réessaie.</div>
+
+<button class="btn" id="btn-vote" onclick="submitVote()">Voter</button>
+
+<script>
+// ── Configuration ──────────────────────────────────
+// Bobain : remplace cette URL par celle de ton Apps Script déployé
+var APPS_SCRIPT_URL = 'VOTRE_URL_APPS_SCRIPT';
+
+// Ordre aléatoire (seed 15, Python random.shuffle)
+var NAMES = ['Parvis','Chapeau','Troubadour','Kiosque','Liesse','Prélude','Saltimbanque','Mélomane','Guinguette','Lyre'];
+var MENTIONS = ['Excellent','Très bien','Bien','Assez bien','Passable','Insuffisant','À rejeter'];
+
+// ── Génération de la grille ────────────────────────
+(function buildGrid() {
+  var tbody = document.getElementById('vote-body');
+  NAMES.forEach(function(name, i) {
+    var tr = document.createElement('tr');
+    var tdName = document.createElement('td');
+    tdName.textContent = name;
+    tr.appendChild(tdName);
+    MENTIONS.forEach(function(mention) {
+      var td = document.createElement('td');
+      var radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = 'vote_' + i;
+      radio.value = mention;
+      td.appendChild(radio);
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+})();
+
+// ── Validation ─────────────────────────────────────
+function validate() {
+  var errors = [];
+  var pseudo = document.getElementById('pseudo').value.trim();
+  if (!pseudo) errors.push('Pseudonyme manquant');
+  NAMES.forEach(function(name, i) {
+    var checked = document.querySelector('input[name="vote_' + i + '"]:checked');
+    if (!checked) errors.push('Mention manquante pour \u00ab\u00a0' + name + '\u00a0\u00bb');
+  });
+  return errors;
+}
+
+// ── Affichage des erreurs (DOM sûr, pas d'innerHTML) ──
+function showValidationErrors(errors) {
+  var el = document.getElementById('msg-validation');
+  el.textContent = '';
+  var ul = document.createElement('ul');
+  ul.className = 'validation-errors';
+  errors.forEach(function(e) {
+    var li = document.createElement('li');
+    li.textContent = e;
+    ul.appendChild(li);
+  });
+  el.appendChild(ul);
+  el.style.display = 'block';
+}
+
+// ── Soumission ─────────────────────────────────────
+function submitVote() {
+  document.getElementById('msg-validation').style.display = 'none';
+  document.getElementById('msg-ok').style.display = 'none';
+  document.getElementById('msg-err').style.display = 'none';
+
+  var errors = validate();
+  if (errors.length > 0) {
+    showValidationErrors(errors);
+    return;
+  }
+
+  var data = { pseudo: document.getElementById('pseudo').value.trim() };
+  NAMES.forEach(function(name, i) {
+    data[name] = document.querySelector('input[name="vote_' + i + '"]:checked').value;
+  });
+
+  var btn = document.getElementById('btn-vote');
+  btn.disabled = true;
+  btn.textContent = 'Envoi\u2026';
+
+  fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(data)
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(res) {
+    if (res.status === 'ok') {
+      document.getElementById('msg-ok').style.display = 'block';
+      btn.textContent = 'Vote enregistré';
+    } else {
+      throw new Error('server error');
+    }
+  })
+  .catch(function() {
+    document.getElementById('msg-err').style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Voter';
+  });
+}
+</script>
+
+</body>
+</html>
