@@ -32,11 +32,11 @@ function doPost(e) {
       var existing = sheet.getRange(2, 1, lastRow - 1, 3).getValues();
       var ipCount = 0;
       for (var i = 0; i < existing.length; i++) {
+        if (existing[i][1] === pseudo) {
+          return jsonResponse({ status: 'error', error: 'Ce pseudonyme a déjà été utilisé.' });
+        }
         if (existing[i][2] === ip) {
           ipCount++;
-          if (existing[i][1] === pseudo) {
-            return jsonResponse({ status: 'error', error: 'Ce pseudonyme a d\u00e9j\u00e0 vot\u00e9 depuis cette connexion.' });
-          }
         }
       }
       if (ip !== 'inconnu' && ipCount >= MAX_VOTES_PER_IP) {
