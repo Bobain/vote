@@ -172,6 +172,12 @@
 </table>
 </div>
 
+<div style="margin-top: 1.5rem;">
+  <label class="pseudo-label" for="suggestion">Une autre idée de nom ?</label>
+  <input type="text" id="suggestion" placeholder="Ton idée (optionnel)" autocomplete="off">
+  <p style="font-size: .75rem; color: #666; margin-top: .3rem;">Cette suggestion est hors protocole de Jugement Majoritaire — elle sera examinée séparément.</p>
+</div>
+
 <!-- ============ SECTION 5 — SOUMISSION ============ -->
 <div id="msg-validation" class="msg msg-warn"></div>
 <div id="msg-ok" class="msg msg-ok">Merci pour ton vote ! Il a bien été enregistré.</div>
@@ -292,6 +298,8 @@ function submitVote() {
   }
 
   var data = { pseudo: document.getElementById('pseudo').value.trim(), ip: voterIP };
+  var suggestion = document.getElementById('suggestion').value.trim();
+  if (suggestion) data.suggestion = suggestion;
   NAMES.forEach(function(name, i) {
     data[name] = document.querySelector('input[name="vote_' + i + '"]:checked').value;
   });
