@@ -146,6 +146,7 @@ var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby6fq0ykEwrdspdOW
 // Les 10 candidats (mélangés aléatoirement à chaque chargement)
 var NAMES = ['Guinguette','Saltimbanque','Farandole','Ritournelle','Bateleur','Bastringue','Baladin','Parvis','Liesse','Chapeau'];
 var MENTIONS = ['Excellent','Très bien','Bien','Assez bien','Passable','Insuffisant','À rejeter'];
+var MAX_VOTES_PER_IP = 4;
 
 // ── Mélange aléatoire (Fisher-Yates) ───────────────
 function shuffle(arr) {
@@ -212,6 +213,18 @@ fetch('https://api.ipify.org?format=json')
   .then(function(d) { voterIP = d.ip; })
   .catch(function() { voterIP = 'inconnu'; });
 
+// ── Protection localStorage ────────────────────────
+var LS_KEY = 'vote_pseudos';
+function getLocalVotes() {
+  try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
+  catch(e) { return []; }
+}
+function saveLocalVote(pseudo) {
+  var votes = getLocalVotes();
+  votes.push(pseudo);
+  localStorage.setItem(LS_KEY, JSON.stringify(votes));
+}
+
 // ── Soumission ─────────────────────────────────────
 function submitVote() {
   document.getElementById('msg-validation').style.display = 'none';
@@ -219,6 +232,17 @@ function submitVote() {
   document.getElementById('msg-err').style.display = 'none';
 
   var errors = validate();
+
+  // Vérification locale (en plus du serveur)
+  var pseudo = document.getElementById('pseudo').value.trim();
+  var localVotes = getLocalVotes();
+  if (localVotes.indexOf(pseudo) !== -1) {
+    errors.push('Ce pseudonyme a d\u00e9j\u00e0 vot\u00e9 sur cet appareil.');
+  }
+  if (localVotes.length >= MAX_VOTES_PER_IP) {
+    errors.push('Maximum ' + MAX_VOTES_PER_IP + ' votes par appareil atteint.');
+  }
+
   if (errors.length > 0) {
     showValidationErrors(errors);
     return;
@@ -241,6 +265,7 @@ function submitVote() {
   .then(function(r) { return r.json(); })
   .then(function(res) {
     if (res.status === 'ok') {
+      saveLocalVote(data.pseudo);
       document.getElementById('msg-ok').style.display = 'block';
       btn.textContent = 'Vote enregistré';
     } else if (res.status === 'error') {
