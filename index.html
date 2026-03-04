@@ -198,6 +198,7 @@
 <div id="msg-err" class="msg msg-err">Erreur lors de l'envoi. Vérifie ta connexion et réessaie.</div>
 
 <button class="btn" id="btn-vote" onclick="submitVote()">Voter</button>
+<p style="font-size: .75rem; color: #666; margin-top: 1rem;">Ton pseudonyme et tes votes sont stockés sur Google Sheets. Aucune autre donnée n'est collectée. Le stockage local (localStorage) sert uniquement à éviter les votes en double sur cet appareil.</p>
 
 <script>
 // ── Configuration ──────────────────────────────────
@@ -208,7 +209,6 @@ var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXzzOXabmvaPUWyi
 var NAMES = ['Guinguette','Saltimbanque','Ritournelle','Bateleur','Bastringue','Baladin','Parvis','Liesse','Chapeau'];
 var MENTIONS = ['Excellent','Très bien','Bien','Assez bien','Passable','Insuffisant','À rejeter'];
 var MENTION_LABELS = ['Exc.','T.B.','Bien','A.B.','Pass.','Ins.','Rej.'];
-var MAX_VOTES_PER_IP = 4;
 
 // ── Mélange aléatoire (Fisher-Yates) ───────────────
 function shuffle(arr) {
@@ -269,12 +269,6 @@ function showValidationErrors(errors) {
   el.style.display = 'block';
 }
 
-// ── Récupération IP ────────────────────────────────
-var voterIP = '';
-fetch('https://api.ipify.org?format=json')
-  .then(function(r) { return r.json(); })
-  .then(function(d) { voterIP = d.ip; })
-  .catch(function() { voterIP = 'inconnu'; });
 
 // ── Protection localStorage ────────────────────────
 var LS_KEY = 'vote_pseudos';
@@ -302,16 +296,12 @@ function submitVote() {
   if (localVotes.indexOf(pseudo) !== -1) {
     errors.push('Ce pseudonyme a d\u00e9j\u00e0 vot\u00e9 sur cet appareil.');
   }
-  if (localVotes.length >= MAX_VOTES_PER_IP) {
-    errors.push('Maximum ' + MAX_VOTES_PER_IP + ' votes par appareil atteint.');
-  }
-
   if (errors.length > 0) {
     showValidationErrors(errors);
     return;
   }
 
-  var data = { pseudo: document.getElementById('pseudo').value.trim(), ip: voterIP };
+  var data = { pseudo: document.getElementById('pseudo').value.trim() };
   var suggestion = document.getElementById('suggestion').value.trim();
   if (suggestion) data.suggestion = suggestion;
   NAMES.forEach(function(name, i) {
