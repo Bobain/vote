@@ -67,6 +67,14 @@
   .validation-errors { list-style: none; padding: 0; }
   .validation-errors li::before { content: "\2022 "; }
 
+  /* Avertissement */
+  .disclaimer {
+    background: #fef3c7; border: 2px solid #d97706;
+    border-radius: var(--radius); padding: 1rem 1.2rem;
+    margin-bottom: 1.5rem; font-size: .9rem; line-height: 1.5;
+  }
+  .disclaimer strong { color: #92400e; }
+
   /* Responsive — cartes sur mobile */
   @media (max-width: 600px) {
     .vote-grid thead { display: none; }
@@ -119,7 +127,12 @@
 <body>
 
 <h1>Choisis le nom de la plateforme !</h1>
-<p>Ce sera à la fois le nom de l'association et de l'application.</p>
+
+<div class="disclaimer">
+<strong>Mise à jour du 4 mars 2026</strong> — Ce vote a été lancé le 3 mars. Le lendemain, Bobain a constaté que les vérifications de disponibilité des noms (notamment à l'<a href="https://data.inpi.fr" target="_blank" rel="noopener">INPI</a>) avaient été faites par l'IA sans accès réel aux sources primaires. Les investigations humaines sont en cours. Certains noms ci-dessous pourraient ne pas être disponibles. Par ailleurs, il n'est pas encore décidé si le nom choisi désignera l'association, la plateforme, ou les deux. Tes votes et suggestions restent précieux — <a href="https://github.com/Bobain/music-platform/issues/17" target="_blank" rel="noopener">détails ici</a>.
+</div>
+
+<p>Aide à choisir le nom de l'association et/ou de la plateforme.</p>
 
 <!-- ============ SECTION 1 — L'ASSOCIATION ============ -->
 <h2>Le projet en bref</h2>
@@ -142,7 +155,8 @@
 
 <!-- ============ SECTION 3 — CRITÈRES ============ -->
 <h2>Les noms proposés</h2>
-<p>Plus de 40 noms ont été explorés selon 10 critères (signification, sonorité, visuel, domaine, app stores, INPI, réseaux sociaux, SEO, connotation, international). Les 9 meilleurs sont présentés ici, en <strong>ordre aléatoire</strong> pour éviter tout biais.</p>
+<p>Plus de 40 noms ont été explorés selon 10 critères (signification, sonorité, visuel, domaine, app stores, INPI*, réseaux sociaux, SEO, connotation, international). Les 9 meilleurs sont présentés ici, en <strong>ordre aléatoire</strong> pour éviter tout biais.</p>
+<p style="font-size: .75rem; color: #92400e;">* La vérification INPI est en cours de reprise manuelle — voir avertissement ci-dessus.</p>
 
 <!-- ============ SECTION 4 — GRILLE DE VOTE ============ -->
 <h2>Ton vote</h2>
